@@ -1,12 +1,12 @@
 # SOLO_MVP
 
-# 注意事項
-- リポジトリをpublicで公開
+## 注意事項
+
 - migrationファイルがあるか（スキーマ作成）
 - APIのエンドポイントあること（GET,POST,DELETE）
 - useState,useEffect使用
 
-# 使用技術：
+## 使用技術：
 
 - フロントサイド：React
 - サーバー：Express
