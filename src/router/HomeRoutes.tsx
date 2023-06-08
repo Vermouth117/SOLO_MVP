@@ -8,6 +8,7 @@ import Home from "../components/pages/Home";
 import OnlineShop, { FlowerInfo } from "../components/pages/OnlineShop";
 import Order from "../components/pages/Order";
 import Page404 from "../components/pages/Page404";
+import User from "../components/pages/User";
 
 type Props = [
   buyCount: number | null,
@@ -70,6 +71,10 @@ export const homeRoutes = [
   {
     path: "/order",
     children: <Order />
+  },
+  {
+    path: "/user",
+    children: <User />
   },
   {
     path: "*",

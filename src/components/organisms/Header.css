@@ -27,10 +27,10 @@
 
 .header-nav-lists {
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
   /* background-color: aquamarine; */
 }
 
@@ -45,6 +45,10 @@
 }
 
 .header-nav-lists li a.cart {
+  padding: 1.2em 2.5em;
+}
+
+.header-nav-lists li a.user {
   padding: 1.2em 2.5em;
 }
 

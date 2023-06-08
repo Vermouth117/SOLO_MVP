@@ -5,11 +5,9 @@ import "./Cart.css";
 import { MyContext } from "../../router/HomeRoutes";
 
 const Cart = memo(() => {
-  console.log("sdfgasdfasdfasdfas");
 
   const [buyCount, setBuyCount, buyFlowerList, setBuyFlowerList] = useContext(MyContext);
   const [totalPriceList, setTotalPriceList] = useState<number[]>([]);
-  const [selectIndex, setSelectIndex] = useState<number>();
 
   useEffect(() => {
     const savedBuyFlowerList = localStorage.getItem("buyFlowerList");
@@ -29,7 +27,7 @@ const Cart = memo(() => {
     dispatch({ type: "update", value: buyCount });
   }, [buyCount]);
 
-  console.log(buyCount);
+  // console.log(buyCount);
 
   const [count, dispatch] =
     useReducer((prev: number | null, { type, value }: { type: string, value: number | null }) => {
@@ -50,7 +48,7 @@ const Cart = memo(() => {
       return parseInt(flowerInfo.price) * (count ? count : 1);
     }));
   }, [count]);
-
+  
   console.log(totalPriceList);
 
   const handleCount = useCallback((e: MouseEvent<HTMLButtonElement>, index: number) => {
@@ -64,10 +62,36 @@ const Cart = memo(() => {
     dispatch({ type: "update", value: parseInt(e.target.value) || null });
   }, []);
 
+  const handleSubmitPost = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    await Promise.all(buyFlowerList.map( async (flowerInfo, index) => {
+      const postObj = {
+        flower_id: flowerInfo["id"],
+        customer_name: "森﨑陽平",
+        picture_url: flowerInfo["picture_url"],
+        price: totalPriceList[index],
+        quantity: buyCount,
+        date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
+      };
+      const postData = await fetch(
+        // "/order",
+        "http://localhost:8080/order",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postObj),
+        }
+      ).then(data => data.json());
+      console.log(postData);
+    }));
+  };
+
   return (
     <main className="cart-list">
       <h2 className="cart-title">Cart</h2>
-      <form className="cart-form">
+      <form className="cart-form" onSubmit={handleSubmitPost}>
         <table className="cart-table">
           <thead>
             <tr>
@@ -174,7 +198,7 @@ const Cart = memo(() => {
         </table>
         <section className="total-box">
           <div className="total-box-title">合計金額</div>
-          <p className="online-shop-flower-price">¥7,700</p>
+          <p className="online-shop-flower-price">{`¥${totalPriceList.reduce((prev, curr) => prev + curr, 0).toString().slice(0, -3).concat(",", totalPriceList.reduce((prev, curr) => prev + curr, 0).toString().toString().slice(-3))}`}</p>
         </section>
         <div className="cart-buy-button">
           <button>購入</button>
