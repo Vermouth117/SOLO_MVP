@@ -1,0 +1,57 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond&family=EB+Garamond&display=swap');
+
+.online-shop {
+  background-color: #F2F2F2;
+  position: relative;
+  min-height: 100vh;
+  padding-top: 11em;
+}
+
+.online-shop-title {
+  font-family: 'Marcellus', serif;
+  font-size: 2.5em;
+  font-weight: 100;
+}
+
+.online-shop-cardList {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  place-items: center;
+  gap: 2em 1em;
+  max-width: 1200px;
+  margin: auto;
+  padding: 2em 5em;
+}
+
+.online-shop-card {
+  transition: all 0.3s;
+}
+
+.online-shop-card:hover {
+  border-radius: 0.5em;
+  box-shadow: 0 0 0.5em 0.1em rgb(200, 200, 200);
+  transform: translateY(-2px);
+  cursor: pointer;
+}
+
+.online-shop-flower {
+  width: 360px;
+  height: 360px;
+  object-fit: cover;
+  border-radius: 0.5em;
+  box-shadow: 0 0 0.5em 0.1em rgb(200, 200, 200);
+}
+
+.online-shop-flower-title {
+  margin: 0.5em 0 0.3em 0;
+  font-size: 1.2em;
+  color: rgb(50, 50, 50);
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.online-shop-flower-price {
+  font-size: 1.5em;
+  color: rgb(80, 80, 80);
+  font-family: 'EB Garamond', serif;
+}
