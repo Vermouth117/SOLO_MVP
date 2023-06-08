@@ -5,7 +5,9 @@ import "./Page404.css";
 
 const Page404 = memo(() => {
   return (
-    <main className="page404">Page404</main>
+    <main className="page404">
+      <h2 className="page404-title">Page404</h2>
+    </main>
   );
 });
 

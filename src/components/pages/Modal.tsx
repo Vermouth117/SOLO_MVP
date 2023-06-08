@@ -1,8 +1,9 @@
 
-import React, { ChangeEvent, MouseEventHandler, RefObject, memo, useCallback, useReducer, useState } from 'react';
+import React, { ChangeEvent, MouseEventHandler, RefObject, memo, useCallback, useContext, useEffect, useReducer } from "react";
 
 import "./Modal.css";
-import { FlowerInfo } from "./OnlineShop"
+import { FlowerInfo } from "./OnlineShop";
+import { MyContext } from "../../router/HomeRoutes";
 
 type Props = {
   inputTriggerRef: RefObject<HTMLInputElement>;
@@ -16,17 +17,19 @@ const Modal: React.FC<Props> = memo(({ inputTriggerRef, flowerInfo }) => {
 
   // console.log((sectionRef.current && sectionRef.current[sectionIndex]?.children[0].children[0] as HTMLImageElement)?.currentSrc);
 
+  const [buyCount, setBuyCount, buyFlowerList, setBuyFlowerList] = useContext(MyContext);
+
   const [count, dispatch] =
-    useReducer((prev: number, { type, value }: { type: string, value: number | null }) => {
+    useReducer((prev: number | null, { type, value }: { type: string, value: number | null }) => {
       switch(type) {
         case "decrease":
-          return --prev;
+          return prev !== null ? --prev : null;
         case "increase":
-          return ++prev;
+          return prev !== null ? ++prev : null;
         case "update":
-          return value === null ? prev : value ;
+          return value === null || isNaN(value) ? null : value;
         default:
-          return prev;
+          return null;
       }
     }, 1);
 
@@ -37,12 +40,36 @@ const Modal: React.FC<Props> = memo(({ inputTriggerRef, flowerInfo }) => {
   }, []);
 
   const inputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "updata", value: parseInt(e.target.value) });
+    // console.log("inputChange", e.target.value);
+    dispatch({ type: "update", value: parseInt(e.target.value) || null });
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("buyCount", JSON.stringify(buyCount));
+  }, [buyCount]);
+
+  useEffect(() => {
+    localStorage.setItem("buyFlowerList", JSON.stringify(buyFlowerList));
+  }, [buyFlowerList]);
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setBuyCount(count);
+    flowerInfo && setBuyFlowerList([...buyFlowerList, flowerInfo]);
+    dispatch({ type: "update", value: 1 });
+    inputTriggerRef.current?.click();
+  };
+
+  const handleClickReset = useCallback(() => {
+    dispatch({ type: "update", value: 1 });
+  }, []);
+
+  console.log(buyCount);
+  console.log(buyFlowerList);
 
   return (
     <main className="modal-wrap">
-      <input id="trigger" type="checkbox" ref={inputTriggerRef} />
+      <input id="trigger" type="checkbox" ref={inputTriggerRef} onClick={handleClickReset}/>
       <article className="modal-overlay">
         <label htmlFor="trigger" className="modal-trigger"></label>
         <section className="modal-content">
@@ -54,7 +81,7 @@ const Modal: React.FC<Props> = memo(({ inputTriggerRef, flowerInfo }) => {
             <div className="modal-content-flower-card">
               <h2 className="modal-content-flower-title">{flowerInfo && flowerInfo["name"]}</h2>
               <p className="modal-content-flower-price">{flowerInfo && `¥${flowerInfo["price"].slice(0, -3).concat(",", flowerInfo["price"].slice(-3))}`}</p>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <table className="modal-content-table">
                   <tbody>
                     <tr>
@@ -62,7 +89,7 @@ const Modal: React.FC<Props> = memo(({ inputTriggerRef, flowerInfo }) => {
                       <td>
                         <div className="modal-content-table-box">
                           <button type="button" className="decrease" onClick={handleCount}>−</button>
-                          <input type="text" id="quantity" name="quantity" value={count} min="1" className="quantity" onChange={e => inputChange(e)} />
+                          <input type="text" id="quantity" name="quantity" value={count !== null ? count.toString() : ""} className="quantity" onChange={e => inputChange(e)} />
                           <button type="button" className="increase" onClick={handleCount}>+</button>
                         </div>
                       </td>

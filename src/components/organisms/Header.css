@@ -60,7 +60,7 @@
   padding: 1em 3em;
   font-family: 'Kaisei Opti', serif;
   font-weight: bold;
-  color: white;
+  color: rgb(0, 0, 0, 0.5);
 }
 
 .header-address span {

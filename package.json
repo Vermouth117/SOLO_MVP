@@ -27,7 +27,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "npm run migrate-back && npm run migrate-latest && npm run seed-data && react-scripts build",
-    "test": "react-scripts test",
+    "test": "mocha --exit",
     "eject": "react-scripts eject",
     "server": "node src/server.js",
     "dev": "nodemon src/server.js",
@@ -57,6 +57,8 @@
     ]
   },
   "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
     "nodemon": "^2.0.22"
   }
 }
