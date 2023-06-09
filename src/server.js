@@ -27,6 +27,15 @@ app.get("/flower", async (req, res) => {
      .send(allFlowerList);
 });
 
+app.get("/order", async (req, res) => {
+  const orderFlowerList = await knex
+    .select("*")
+    .from("order_info");
+  res.set("content-type", "application/json")
+     .status(200)
+     .send(orderFlowerList);
+});
+
 app.post("/order", async (req, res) => {
   console.log(req.body);
   // await knex("order_info").del().where(req.body);

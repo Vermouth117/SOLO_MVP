@@ -67,6 +67,7 @@ const Cart = memo(() => {
     await Promise.all(buyFlowerList.map( async (flowerInfo, index) => {
       const postObj = {
         flower_id: flowerInfo["id"],
+        flower_name: flowerInfo["name"],
         customer_name: "森﨑陽平",
         picture_url: flowerInfo["picture_url"],
         price: totalPriceList[index],
@@ -74,8 +75,8 @@ const Cart = memo(() => {
         date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
       };
       const postData = await fetch(
-        // "/order",
-        "http://localhost:8080/order",
+        "/order",
+        // "http://localhost:8080/order",
         {
           method: "POST",
           headers: {

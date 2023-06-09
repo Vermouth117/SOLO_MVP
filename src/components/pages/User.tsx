@@ -1,9 +1,34 @@
 
-import { memo } from "react";
+import { Fragment, memo, useEffect, useState } from "react";
 
 import "./User.css";
 
+export type Props = {
+  flower_id: number,
+  flower_name: string,
+  customer_name: string,
+  picture_url: string,
+  price: string,
+  quantity: number,
+  date: string,
+}
+
 const User = memo(() => {
+
+  const [orderFlowerList, setOrderFlowerList] = useState<Props[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const orderFlowerList = await fetch(
+        "/order"
+        // "http://localhost:8080/order"
+      ).then(data => data.json());
+      setOrderFlowerList(orderFlowerList);
+    })();
+  }, []);
+
+  console.log(orderFlowerList);
+
   return (
     <main className="user-info">
       <h2 className="user-title">History</h2>
@@ -22,59 +47,39 @@ const User = memo(() => {
               <td style={{ padding: 0, borderTop: "1px solid #f1f1f1" }} colSpan={5}>
               </td>
             </tr>
-            <tr>
-              <td>
-                <img className="cart-table-flower" src="https://st3.depositphotos.com/10654668/15053/i/450/depositphotos_150539182-stock-photo-beautiful-bouquet-of-roses.jpg" alt="花束" />
-              </td>
-              <td className="col2">
-                <h3 className="cart-table-flower-title">Pink Please</h3>
-                <button type="button" className="deleteButton">キャンセル</button>
-              </td>
-              <td>
-                <p className="online-shop-flower-price">¥7,700</p>
-              </td>
-              <td>
-                <div className="cart-table-box">
-                  <input type="text" id="quantity" name="quantity" className="quantity" defaultValue={1} />
-                </div>
-              </td>
-              <td>
-                <p className="online-shop-flower-price">¥7,700</p>
-              </td>
-            </tr>
-            <tr style={{ height: "auto" }}>
-              <td style={{ padding: 0, borderTop: "1px solid #f1f1f1" }} colSpan={5}>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <img className="cart-table-flower" src="https://st3.depositphotos.com/10654668/15053/i/450/depositphotos_150539182-stock-photo-beautiful-bouquet-of-roses.jpg" alt="花束" />
-              </td>
-              <td className="col2">
-                <h3 className="cart-table-flower-title">Pink Please</h3>
-                <button type="button" className="deleteButton">キャンセル</button>
-              </td>
-              <td>
-                <p className="online-shop-flower-price">¥7,700</p>
-              </td>
-              <td>
-                <div className="cart-table-box">
-                  <input type="text" id="quantity" name="quantity" className="quantity" defaultValue={1} />
-                </div>
-              </td>
-              <td>
-                <p className="online-shop-flower-price">¥7,700</p>
-              </td>
-            </tr>
-            <tr style={{ height: "auto" }}>
-              <td style={{ padding: 0, borderTop: "1px solid #f1f1f1" }} colSpan={5}>
-              </td>
-            </tr>
+            {orderFlowerList.map((flowerInfo, index) => (
+              <Fragment key={index}>
+                <tr>
+                  <td>
+                    <img className="cart-table-flower" src={flowerInfo["picture_url"]} alt="花束" />
+                  </td>
+                  <td className="col2">
+                    <h3 className="cart-table-flower-title">{flowerInfo["flower_name"]}</h3>
+                    <button type="button" className="deleteButton">キャンセル</button>
+                  </td>
+                  <td>
+                    <p className="online-shop-flower-price">{`¥${flowerInfo["price"].toString().slice(0, -3).concat(",", flowerInfo["price"].toString().slice(-3))}`}</p>
+                  </td>
+                  <td>
+                    <div className="history-table-box">
+                      <input type="text" id="quantity" name="quantity" className="quantity" defaultValue={flowerInfo["quantity"]} />
+                    </div>
+                  </td>
+                  <td>
+                    <p className="online-shop-flower-price">{`¥${parseInt(flowerInfo["price"]) * flowerInfo["quantity"]}`.slice(0, -3).concat(",", `${parseInt(flowerInfo["price"]) * flowerInfo["quantity"]}`.slice(-3))}</p>
+                  </td>
+                </tr>
+                <tr style={{ height: "auto" }}>
+                  <td style={{ padding: 0, borderTop: "1px solid #f1f1f1" }} colSpan={5}>
+                  </td>
+                </tr>
+              </Fragment>
+            ))}
           </tbody>
         </table>
         <section className="total-box">
           <div className="total-box-title">合計金額</div>
-          <p className="online-shop-flower-price">¥7,000</p>
+          <p className="online-shop-flower-price">{`¥${orderFlowerList.reduce((prev, curr) => prev + (parseInt(curr["price"]) * curr["quantity"]), 0)}`.slice(0, -3).concat(",", `${orderFlowerList.reduce((prev, curr) => prev + (parseInt(curr["price"]) * curr["quantity"]), 0)}`.slice(-3))}</p>
         </section>
       </form>
     </main>
