@@ -37,8 +37,8 @@ const User = memo(() => {
   const handleCancel = useCallback( async (index: number) => {
     console.log(orderFlowerList[index]);
     const deleteData = await fetch(
-      // "/delete",
-      "http://localhost:8080/delete",
+      "/delete",
+      // "http://localhost:8080/delete",
       {
         method: "DELETE",
         headers: {
