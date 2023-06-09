@@ -75,8 +75,8 @@ const Cart = memo(() => {
         date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
       };
       const postData = await fetch(
-        "/order",
-        // "http://localhost:8080/order",
+        // "/order",
+        "http://localhost:8080/order",
         {
           method: "POST",
           headers: {

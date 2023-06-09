@@ -46,6 +46,14 @@ app.post("/order", async (req, res) => {
      .send(req.body);
 });
 
+app.delete("/delete", async (req, res) => {
+  console.log(req.body);
+  await knex("order_info").del().where({ id: req.body.id });
+  res.set("content-type", "application/json")
+     .status(200)
+     .send(req.body);
+})
+
 app.listen(PORT, () => {
   console.log(`HTTP Request on PORT ${PORT}`);
 });
