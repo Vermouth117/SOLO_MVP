@@ -22,8 +22,8 @@ const OnlineShop = memo(() => {
   useEffect(() => {
     (async () => {
       const allFlowerList = await fetch(
-        // "/flower"
-        "http://localhost:8080/flower"
+        "/flower"
+        // "http://localhost:8080/flower"
       ).then(data => data.json());
       setAllFlowerList(allFlowerList);
     })();

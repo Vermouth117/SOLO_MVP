@@ -21,8 +21,8 @@ const User = memo(() => {
   useEffect(() => {
     (async () => {
       const orderFlowerList = await fetch(
-        // "/order"
-        "http://localhost:8080/order"
+        "/order"
+        // "http://localhost:8080/order"
       ).then(data => data.json());
       setOrderFlowerList(orderFlowerList);
     })();
