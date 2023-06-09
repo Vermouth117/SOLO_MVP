@@ -86,6 +86,9 @@ const Cart = memo(() => {
         }
       ).then(data => data.json());
       console.log(postData);
+      setBuyFlowerList([]);
+      setTotalPriceList([]);
+      localStorage.setItem("buyFlowerList", JSON.stringify([]));
     }));
   };
 
